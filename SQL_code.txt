@@ -1,0 +1,184 @@
+create table employee
+(emp_id number(6) primary key,
+fName varchar(20), 
+lName varchar(20),
+salary number(7),
+bonus number(6),
+EmloymentDate date);
+
+create table facility
+(facility_id varchar(6) primary key,
+ name varchar2(20));
+
+create table staff
+(emp_id number(6) constraint emp_idFK references employee(emp_id),
+facility_id varchar(6) constraint facility_FK references facility(facility_id));
+
+create table security(emp_id number(6) constraint emp_securityFK references employee(emp_id));
+
+create table manager(emp_id number(6) constraint emp_managerFK references employee(emp_id));
+
+create table shops(facility_id varchar(6) constraint facility_shopsFK references facility(facility_id));
+
+create table lounge(facility_id varchar(6) constraint facility_loungeFK references facility(facility_id));
+
+create table restaurant(facility_id varchar(6) constraint facility_restaurantFK references facility(facility_id));
+
+create table Employee_Mobile_No
+(mobile_no number(13) primary key,
+ emp_id number(6) constraint emp_mobileFK references employee(emp_id));
+
+create table engineer 
+(emp_id number(6) constraint emp_engineerFK references employee(emp_id));
+
+create table airline
+(airline_id varchar2(6) primary key,
+ name varchar2(20),
+ NoOfPlanes number(6));
+
+create table plane
+(plane_no number(7) primary key,
+ NoOfEngines number(6),
+ type varchar2(20),
+ capacity number(7),
+ airline_id varchar2(6) constraint airline_planeFK references airline(airline_id));
+
+create table flight
+(flight_no varchar2(10) primary key,
+ source varchar2(15),
+ destination varchar2(15),
+ airline_id varchar2(6) constraint airline_flightFK references airline(airline_id),
+ DepartureTime varchar2(20),
+ ArrivalTime varchar2(20));
+
+create table passenger
+(passenger_id number(15) primary key,
+ nationality varchar2(15),
+ fName varchar2(15),
+ lName varchar2(15),
+ age number(6));
+
+create table ticket
+(ticket_id number(15) primary key,
+ flightDate date,
+ flight_no varchar2(10) constraint flight_ticketFK references flight(flight_no),
+ passenger_id number(15) constraint passenger_flightFK references passenger(passenger_id));
+
+create table fix
+(emp_id number(6) constraint fix_emp_engineerFK references employee(emp_id),
+ plane_no number(7) constraint fix_planeFK references plane(plane_no));
+
+-------------------------------------------------------------------------------------------------
+
+insert into employee values(0001,'Mohammad','Ali',1500,150,'02-NOV-2021');
+insert into employee(emp_id,fName,lName,salary,EmloymentDate) values(0002,'Khaled','Asaad',1780,'10-MAY-2020');
+insert into employee values(0003,'Kamel','Qatawneh',1250,200,'23-AUG-2022');
+insert into employee(emp_id,fName,lName,salary,EmloymentDate) values(0004,'Ahmad','Masalha',1800,'20-OCT-2019');
+insert into employee(emp_id,fName,lName,salary,EmloymentDate) values(0005,'Yara','Hadidi',1540,'09-SEP-2021');
+
+---------------------------------------------
+
+insert into Employee_Mobile_No values(0795555555,0001);
+insert into Employee_Mobile_No values(0784444444,0002);
+insert into Employee_Mobile_No values(0776666666,0002);
+insert into Employee_Mobile_No values(0791111111,0003);
+insert into Employee_Mobile_No values(0799999999,0005);
+
+-----------------------------------------------
+
+insert into airline values('RJ','Royal Jordanian',26);
+insert into airline values('EK','Emirates Airlines',269);
+insert into airline values('TK','Turkish Airlines',396);
+insert into airline values('QR','Qatar Airways',235);
+insert into airline values('MS','EgyptAir',70);
+
+----------------------------------------------
+
+insert into plane values(21068,2,'Boeing 787-8',250,'RJ');
+insert into plane values(19144,2,'Airbus A320-200',170,'RJ');
+insert into plane values(8498,4,'Airbus A380',853,'QR');
+insert into plane values(34813,2,'Boeing 737 MAX 9',178,'TK');
+insert into plane values(52570,4,'Airbus A380',853,'EK');
+
+----------------------------------------------
+
+insert into flight values('RJ164','Amman','Iraq','RJ','18:30','20:00');
+insert into flight values('QR278','Qatar','Amman','QR','7:00','9:30');
+insert into flight values('EK333','Amman','Dubai','EK','17:15','20:15');
+insert into flight values('TK624','Amman','Turkey','TK','23:00','1:45');
+insert into flight values('RJ319','Dubai','Amman','RJ','15:30','20:35');
+
+----------------------------------------------
+
+insert into passenger values(2000735463,'Jordanian','Fathi','Shedefat',24);
+insert into passenger values(3487277765,'Turkish','Emir','Yilmaz',60);
+insert into passenger values(1788885364,'Iraqi','Ameer','Dulaimy',20);
+insert into passenger values(2323984766,'Jordanian','Mohammad','Asaf',41);
+insert into passenger values(6567893444,'Palestinian','Sameh','Tafesh',35);
+
+----------------------------------------------
+
+insert into ticket values(512373763838,'02-FEB-2023','RJ319',2000735463);
+insert into ticket values(656774673747,'28-JAN-2023','EK333',2000735463);
+insert into ticket values(439843840384,'15-JAN-2023','RJ164',1788885364);
+insert into ticket values(834857384787,'05-FEB-2023','QR278',6567893444);
+insert into ticket values(123547748366,'01-MAR-2023','TK624',3487277765);
+
+--------------------------------------------------------------
+
+insert into facility values('A1','Duty Free');
+insert into facility values('B1','McDonalds');
+insert into facility values('B2','Burger King');
+insert into facility values('C1','First Class Lounge');
+insert into facility values('C2','VIP Lounge');
+
+------------------------------------------------------------
+
+insert into Shops values('A1');
+insert into restaurant values('B1');
+insert into restaurant values('B2');
+insert into lounge values('C1');
+insert into lounge values('C2');
+
+-------------------------------------------------------------
+
+insert into engineer values(0003);
+insert into security values(0002);
+insert into manager values(0005);
+insert into staff values(0001,'A1');
+insert into staff values(0004,'C1');
+
+--------------------------------------------------------------
+
+insert into fix values(0003,21068);
+insert into fix values(0003,19144);
+
+-------------------------------------------------------------
+
+
+Update Flight 
+set DepartureTime = '9:00',ArrivalTime='11:30'
+where Flight_No = 'QR278';
+
+Update Airline
+Set NoOfPlanes = 30
+where Name = 'Royal Jordanian';
+
+------------------------------------------------------------
+
+Delete From Ticket 
+where Flight_No = 'TK624';
+
+Delete From Flight
+where Flight_No = 'TK624';
+
+-------------------------------------------------------------
+
+SELECT Airline.Airline_ID, Airline.Name, Plane.Plane_No, Plane.Type
+FROM 	 Airline,Plane	
+WHERE  Airline.Airline_ID = Plane.Airline_ID;
+
+----------------------------------------------------------------
+
+
+
